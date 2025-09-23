@@ -14,3 +14,12 @@ phases:
       - terraform init
       - terraform plan -out tfplan
       - terraform apply -auto-approve tfplan
+    
+  post_build:
+    commands:
+      - echo "Exporting Terraform Outputs..."
+      - terraform output -json > terraform_outputs.json
+
+artifacts:
+  files:
+    - terraform_outputs.json

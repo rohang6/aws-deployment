@@ -1,0 +1,15 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo "Installing Terraform..."
+      - curl -o terraform.zip https://releases.hashicorp.com/terraform/1.9.8/terraform_1.9.8_linux_amd64.zip
+      - unzip terraform.zip
+      - my terraform /usr/local/bin
+    
+  build:
+    commands:
+      - echo "Destroying terraform managed-resources"
+      - terraform init
+      - terraform destroy --auto-approve
