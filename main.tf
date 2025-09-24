@@ -2,6 +2,10 @@ provider "aws" {
   region = "ap-south-1"
 }
 
+data "aws_vpc" "default" {
+  default = true
+}
+
 # s3 Bucket
 resource "aws_s3_bucket" "demo_bucket" {
   bucket = "my-terraform-demo-bucket-916334832814"
