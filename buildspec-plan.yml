@@ -1,0 +1,17 @@
+version: 0.2
+
+phases:
+  install:
+    runtime_version:
+      python: 3.11
+    commands:
+      - echo "Installing Terraform"
+      - curl -o terraform.zip https://releases.hashicorp.com/terraform/1.5.7/terraform_1.5.7_linux_amd64.zip
+      - unzip terraform.zip -d /usr/local/bin/
+      - terraform init -input=false
+  build:
+    commands:
+      - terraform plan -out=plan.out
+artifacts:
+  files:
+    - plan.out
