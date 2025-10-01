@@ -38,6 +38,6 @@ resource "aws_instance" "web" {
             usermod -aG docker ubuntu
 
             $(aws ecr get-login --no-include-email --region ap-south-1)
-            docker run -d -p 80:5000 ${data.aws_ecr_reporitory.ecr_repo.repository_url}:latest
+            docker run -d -p 80:5000 ${data.aws_ecr_repository.ecr_repo.repository_url}:latest
         EOF
 }
