@@ -19,3 +19,16 @@ resource "aws_subnet" "private_subnet" {
     cidr_block = var.private_subnets[count.index]
     availability_zone = data.aws_availability_zones.available.names[count.index]
 }
+
+resource "aws_internet_gateway" "igw" {
+    vpc_id = aws_vpc.aws_deployment.id
+}
+
+resource "aws_route_table" "public_rt" {
+    vpc_id = aws_vpc.aws_deployment.id
+
+    route {
+        cidr_block = "0.0.0.0/0"
+        gateway_id = aws_internet_gateway.igw.id
+    }
+}
