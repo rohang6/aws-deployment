@@ -32,6 +32,7 @@ resource "aws_instance" "web" {
     instance_type = "t2.micro"
     subnet_id = var.subnet_id
     vpc_security_group_ids = [aws_security_group.ec2_sg.id]
+    iam_instance_profile = "EC2-SSM"
     user_data = <<-EOF
             #!/bin/bash
             sudo apt update 
