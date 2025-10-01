@@ -27,7 +27,7 @@ data "aws_ecr_repository" "ecr_repo" {
     name = "myapp"
 }
 
-resource "aws_instance" "web" {
+resource "aws_instance" "ubuntu" {
     ami = var.ami_id
     instance_type = "t2.micro"
     subnet_id = var.subnet_id

@@ -1,5 +1,5 @@
 output "public_ip" {
-  value = aws_instance.web.public_ip
+  value = aws_instance.ubuntu.public_ip
 }
 
 output "ec2_sg_id" {

@@ -1,6 +1,6 @@
 variable "ami_id" {
     description = "Instance id"
-    default = "ami-01b6d88af12965bb6"
+    default = "ami-02d26659fd82cf299"
 }
 
 variable "vpc_id" {}
