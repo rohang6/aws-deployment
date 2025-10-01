@@ -1,8 +1,8 @@
 from flask import Flask
-import pymysql
 import os
 import boto3
 import json
+
 
 app = Flask(__name__)
 

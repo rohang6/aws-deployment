@@ -17,9 +17,27 @@ resource "aws_security_group" "ec2_sg" {
     }
 }
 
+data "aws_ecr_repository" "ecr_repo" {
+    name = "myapp"
+}
+
 resource "aws_instance" "web" {
     ami = var.ami_id
     instance_type = "t2.micro"
     subnet_id = var.subnet_id
     vpc_security_group_ids = [aws_security_group.ec2_sg.id]
+    user_data = <<-EOF
+            #!/bin/bash
+            sudo apt update 
+            sudo apt upgrade -y
+
+            # Installing Docker
+            sudo apt install docker.io -y
+
+            sudo systemctl start docker
+            usermod -aG docker ubuntu
+
+            $(aws ecr get-login --no-include-email --region ap-south-1)
+            docker run -d -p 80:5000 ${data.aws_ecr_reporitory.ecr_repo.repository_url}:latest
+        EOF
 }

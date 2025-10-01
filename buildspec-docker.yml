@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo "Logging in to ECR"
+      - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 916334832814.dkr.ecr.ap-south-1.amazonaws.com/myapp
+      - REPO_URI=916334832814.dkr.ecr.ap-south-1.amazonaws.com/myapp
+      - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+  
+  build:
+    commands:
+      - echo "Building Docker Image"
+      - docker build -t $REPO_URI:latest .
+      - docker tag $REPO_URI:latest $REPO_URI:$IMAGE_TAG
+      - docker push $REPO_URI:$IMAGE_TAG
