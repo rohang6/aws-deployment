@@ -8,6 +8,12 @@ resource "aws_security_group" "ec2_sg" {
         protocol = "tcp"
         cidr_blocks = ["0.0.0.0/0"]
     }
+    ingress {
+        from_port = 8080
+        to_port = 8080
+        protocol = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
 
     egress {
         from_port = 0
@@ -38,6 +44,6 @@ resource "aws_instance" "web" {
             usermod -aG docker ubuntu
 
             $(aws ecr get-login --no-include-email --region ap-south-1)
-            docker run -d -p 80:5000 ${data.aws_ecr_repository.ecr_repo.repository_url}:latest
+            docker run -d -p 8080:5000 ${data.aws_ecr_repository.ecr_repo.repository_url}:latest
         EOF
 }
