@@ -18,7 +18,7 @@ resource "aws_security_group" "rds_sg" {
 resource "aws_db_subnet_group" "db_subnet" {
     name = "db_subnet"
     subnet_ids = var.subnets
-} 
+}
 
 resource "aws_db_instance" "mydb" {
     allocated_storage = 20
