@@ -6,3 +6,8 @@ variable "ami_id" {
 variable "vpc_id" {}
 
 variable "subnet_id" {}
+
+variable "db_secret_arn"{
+    type = string
+    description = "Secret Manager ARN"
+}

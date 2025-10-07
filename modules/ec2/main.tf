@@ -60,7 +60,8 @@ resource "aws_iam_role_policy" "inline_policy"{
                 Action = [
                     "ecr:GetAuthorizationToken",
                     "ecr:BatchGetImage",
-                    "ecr:GetDownloadUrlForLayer"
+                    "ecr:GetDownloadUrlForLayer",
+                    "secretsmanager:GetSecretValue"
                 ]
                 Effect   = "Allow"
                 Resource = "*"
@@ -84,12 +85,14 @@ resource "aws_instance" "ubuntu" {
             #!/bin/bash
             sudo apt update 
             sudo apt upgrade -y
-            sudo apt install unzip -y
+            sudo apt install unzip 
+
+            export DB_ARN=${var.db_secret_arn}
 
             # installing awscli 
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
-            sudo ./aws/install"
+            sudo ./aws/install
 
             # Installing Docker
             sudo apt install docker.io -y
@@ -98,6 +101,6 @@ resource "aws_instance" "ubuntu" {
             usermod -aG docker ubuntu
 
             aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin ${data.aws_ecr_repository.ecr_repo.repository_url}
-            docker run -d -p 8080:5000 ${data.aws_ecr_repository.ecr_repo.repository_url}:latest
+            docker run -d -p 8080:5000 -e DB_SECRET_ARN=$DB_ARN ${data.aws_ecr_repository.ecr_repo.repository_url}:latest
         EOF
 }
