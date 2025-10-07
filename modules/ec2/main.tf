@@ -69,12 +69,17 @@ resource "aws_iam_role_policy" "inline_policy"{
     })
 }
 
+resource "aws_iam_instance_profile" "ec2_access" {
+    name = "ec2_access"
+    role = aws_iam_role.ec2_role.name
+}
+
 resource "aws_instance" "ubuntu" {
     ami = var.ami_id
     instance_type = "t2.micro"
     subnet_id = var.subnet_id
     vpc_security_group_ids = [aws_security_group.ec2_sg.id]
-    iam_instance_profile = "EC2-SSM"
+    iam_instance_profile = aws_iam_instance_profile.ec2_access.name
     user_data = <<-EOF
             #!/bin/bash
             sudo apt update 
