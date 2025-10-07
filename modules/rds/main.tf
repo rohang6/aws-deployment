@@ -33,7 +33,7 @@ resource "aws_db_instance" "mydb" {
 }
 
 resource "aws_secretsmanager_secret" "db_secret"{
-    name = "mydb_secret_07"
+    name = "mydb_secret_07_15"
 }
 
 resource "aws_secretsmanager_secret_version" "db_secret_value" {
