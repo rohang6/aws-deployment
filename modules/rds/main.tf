@@ -1,6 +1,7 @@
 resource "random_password" "db_password" {
     length = 16
     special = true
+    override_special = "!#$%^&*()_+-=[]{}|:,.<>?"  # safe special chars
 }
 
 resource "aws_security_group" "rds_sg" {
@@ -33,7 +34,7 @@ resource "aws_db_instance" "mydb" {
 }
 
 resource "aws_secretsmanager_secret" "db_secret"{
-    name = "mydb_secret_08_19"
+    name = "mydb_secret_08_20"
 }
 
 resource "aws_secretsmanager_secret_version" "db_secret_value" {
