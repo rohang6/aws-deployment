@@ -8,9 +8,8 @@ phases:
       - echo "Logging in to ECR"
       - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin $ECR_REPO_URL
       - REPO_URI=$ECR_REPO_URL
-      - export IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=$(date +%Y%m%d%H%M%S)
       - echo "IMAGE_TAG=$IMAGE_TAG"
-      - echo "REPO_URI=$REPO_URI"
   
   build:
     commands:
