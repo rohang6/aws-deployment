@@ -17,7 +17,7 @@ phases:
       - export DB_SECRET_ARN=$(jq -r '.db_secret_arn.value' terraform_outputs.json)
       - echo "DB_SECRET_ARN=$DB_SECRET_ARN"
       - echo "Ansible Inventory"
-      - INSTANCE_IP = $(aws ec2 describe-instances --filters "Name=tag:Name,Values=myapp" --query "Reservations[*].Instances[*].PublicIpAddress" --output text)
+      - INSTANCE_IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=myapp" --query "Reservations[*].Instances[*].PublicIpAddress" --output text)
       - echo "[myapp]" > $INVENTORY_FILE
       - echo "$Instance_IP ansible_user=ubuntu ansible_ssh_private_key_file=/root/.ssh/id_rsa" >> $INVENTORY_FILE
 
