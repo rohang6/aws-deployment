@@ -1,0 +1,27 @@
+version: 0.2
+
+env: 
+  variables:
+    INVENTORY_FILE: "inventory.ini"
+
+phases:
+  install:
+    commands:
+      - yum install -y ansible
+  
+  pre_build:
+    commands:
+      - echo "Extracting Terraform Outputs"
+      - export ECR_REPO_URL=$(jq -r '.ecr_repo_url.value' terraform_outputs.json)
+      - echo "ECR_REPO_URL=$ECR_REPO_URL"
+      - export DB_SECRET_ARN=$(jq -r '.db_secret_arn.value' terraform_outputs.json)
+      - echo "DB_SECRET_ARN=$DB_SECRET_ARN"
+      - echo "Ansible Inventory"
+      - INSTANCE_IP = $(aws ec2 describe-instances --filters "Name=tag:Name,Values=myapp" --query "Reservations[*].Instances[*].PublicIpAddress" --output text))
+      - echo "[myapp]" > $INVENTORY_FILE
+      - echo "$Instance_IP ansible_user=ubuntu ansible_ssh_private_key_file=/root/.ssh/id_rsa" >> $INVENTORY_FILE
+
+  build:
+    commands:
+      - echo "Running Playbook"
+      - ansible-playbook -i $INVENTORY_FILE playbook.yml --extra-vars "ecr_repo_url=$ECR_REPO_URL DB_SECRET_ARN=$DB_SECRET_ARN" x

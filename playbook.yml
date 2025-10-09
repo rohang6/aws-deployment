@@ -1,0 +1,22 @@
+---
+- hosts: myapp
+  become: yes
+  tasks:
+    - name: Install docker
+      apt:
+        name: docker.io
+        state: present
+    - name: Start docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+      
+    - name: Login to ecr
+      shell: aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin {{ ecr_repo_url }}
+
+    - name: Pull Image 
+      shell: docker pull {{ ecr_repo_url }}:latest
+
+    - name: Run container
+      shell: docker run -d -p 8080:5000 -e DB_SECRET_ARN={{DB_SECRET_ARN}} {{ ecr_repo_url }}:latest

@@ -34,7 +34,7 @@ resource "aws_db_instance" "mydb" {
 }
 
 resource "aws_secretsmanager_secret" "db_secret"{
-    name = "mydb_secret_08_20"
+    name = "mydb_secret_09_20"
 }
 
 resource "aws_secretsmanager_secret_version" "db_secret_value" {
