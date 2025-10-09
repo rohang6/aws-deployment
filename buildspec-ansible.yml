@@ -16,7 +16,8 @@ phases:
       - echo "ECR_REPO_URL=$ECR_REPO_URL"
       - export DB_SECRET_ARN=$(jq -r '.db_secret_arn.value' terraform_outputs.json)
       - echo "DB_SECRET_ARN=$DB_SECRET_ARN"
-      - echo -e "Host *\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+      - aws secretsmanager get-secret-value --secret-id OtestKey.pem --query SecretString --output text > ~/.ssh/id_rsa
+      - echo -e "Host *\n  IdentityFile ~/.ssh/id_rsa\n  StrictHostKeyChecking no\n" > ~/.ssh/config
       - chmod 600 ~/.ssh/config
       - echo "Ansible Inventory"
       - INSTANCE_IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=myapp" --query "Reservations[*].Instances[*].PublicIpAddress" --output text)
