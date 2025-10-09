@@ -19,6 +19,7 @@ phases:
       - aws secretsmanager get-secret-value --secret-id OtestKey.pem --query SecretString --output text > ~/.ssh/id_rsa
       - echo -e "Host *\n  IdentityFile ~/.ssh/id_rsa\n  StrictHostKeyChecking no\n" > ~/.ssh/config
       - chmod 600 ~/.ssh/config
+      - chmod 600 ~/.ssh/id_rsa
       - echo "Ansible Inventory"
       - INSTANCE_IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=myapp" --query "Reservations[*].Instances[*].PublicIpAddress" --output text)
       - echo "[myapp]" > $INVENTORY_FILE
