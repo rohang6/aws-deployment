@@ -23,3 +23,9 @@ phases:
 artifacts:
   files:
     - terraform_outputs.json
+    - buildspec-docker.yml
+    - app.py
+    - Dockerfile 
+    - requirements.txt
+    - buildspec-ansible.yml
+    - playbook.yml
