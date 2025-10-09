@@ -24,4 +24,4 @@ phases:
   build:
     commands:
       - echo "Running Playbook"
-      - ansible-playbook -i $INVENTORY_FILE playbook.yml --extra-vars "ecr_repo_url=$ECR_REPO_URL DB_SECRET_ARN=$DB_SECRET_ARN" x
+      - ansible-playbook -i $INVENTORY_FILE playbook.yml --extra-vars "ecr_repo_url=$ECR_REPO_URL DB_SECRET_ARN=$DB_SECRET_ARN"
