@@ -103,7 +103,7 @@ resource "aws_instance" "ubuntu" {
             sudo systemctl start docker
             usermod -aG docker ubuntu
 
-            aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin ${data.aws_ecr_repository.ecr_repo.repository_url}
-            docker run -d -p 8080:5000 -e DB_SECRET_ARN=$DB_ARN ${data.aws_ecr_repository.ecr_repo.repository_url}:latest
+            aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin ${aws_ecr_repository.ecr_repo.repository_url}
+            docker run -d -p 8080:5000 -e DB_SECRET_ARN=$DB_ARN ${aws_ecr_repository.ecr_repo.repository_url}:latest
         EOF
 }
