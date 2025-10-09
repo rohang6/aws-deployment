@@ -23,7 +23,7 @@ resource "aws_security_group" "ec2_sg" {
     }
 }
 
-data "aws_ecr_repository" "ecr_repo" {
+resource "aws_ecr_repository" "ecr_repo" {
     name = "myapp"
 }
 
