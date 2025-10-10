@@ -16,14 +16,14 @@ phases:
       - echo "ECR_REPO_URL=$ECR_REPO_URL"
       - export DB_SECRET_ARN=$(jq -r '.db_secret_arn.value' terraform_outputs.json)
       - echo "DB_SECRET_ARN=$DB_SECRET_ARN"
-      - aws secretsmanager get-secret-value --secret-id OtestKey.pem --query SecretString --output text > ~/.ssh/id_rsa
-      - echo -e "Host *\n  IdentityFile ~/.ssh/id_rsa\n  StrictHostKeyChecking no\n" > ~/.ssh/config
-      - chmod 600 ~/.ssh/config
-      - chmod 600 ~/.ssh/id_rsa
+      - ssh-keygen -t rsa -b 2048 -f "id_rsa" -N ""
+      - aws secretsmanager get-secret-value --secret-id OtestKey.pem --query SecretString --output text > OtestKey.pem
+      - chmod 600 OtestKey.pem
       - echo "Ansible Inventory"
       - INSTANCE_IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=myapp" --query "Reservations[*].Instances[*].PublicIpAddress" --output text)
       - echo "[myapp]" > $INVENTORY_FILE
-      - echo "$INSTANCE_IP ansible_user=ubuntu ansible_ssh_private_key_file=/root/.ssh/id_rsa" >> $INVENTORY_FILE
+      - echo "$INSTANCE_IP ansible_user=ubuntu" >> $INVENTORY_FILE
+      - cat ~/.ssh/id_rsa.pub | ssh -i OtestKey.pem ubuntu@$INSTANCE_IP 'mkdir -p ~/.ssh && chmod 700 ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys'
 
   build:
     commands:
