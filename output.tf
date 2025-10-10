@@ -13,3 +13,11 @@ output "ecr_repo_url" {
 output "vpc_id" {
     value = module.vpc.vpc_id
 }
+
+output "db_secret_arn" {
+    value = module.rds.db_secret_arn
+}
+
+output "sshKey" {
+    value = module.ec2.private_key_pem
+}

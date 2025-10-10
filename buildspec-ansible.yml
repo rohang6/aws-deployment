@@ -16,10 +16,11 @@ phases:
       - echo "ECR_REPO_URL=$ECR_REPO_URL"
       - export DB_SECRET_ARN=$(jq -r '.db_secret_arn.value' terraform_outputs.json)
       - echo "DB_SECRET_ARN=$DB_SECRET_ARN"
-      - ssh-keygen -t rsa -b 2048 -f "id_rsa" -N ""
-      - aws secretsmanager get-secret-value --secret-id OtestKey.pem --query SecretString --output text > OtestKey.pem
+      - export sshKey=$(jq -r '.sshKey.value' terraform_outputs.json))
+      - echo "$sshKey" > OtestKey.pem
       - chmod 600 OtestKey.pem
       - echo "Ansible Inventory"
+      - ssh-keygen -t rsa -b 2048 -f "id_rsa" -N ""
       - INSTANCE_IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=myapp" --query "Reservations[*].Instances[*].PublicIpAddress" --output text)
       - echo "[myapp]" > $INVENTORY_FILE
       - echo "$INSTANCE_IP ansible_user=ubuntu" >> $INVENTORY_FILE

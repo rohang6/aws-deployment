@@ -9,3 +9,8 @@ output "ec2_sg_id" {
 output "ecr_repo_url" {
     value = aws_ecr_repository.ecr_repo.repository_url
 }
+
+output "private_key_pem" {
+    value = tls_private_key.testKey.private_key_pem
+    sensitive = true
+}

@@ -1,3 +1,14 @@
+
+resource "tls_private_key" "testKey" {
+  algorithm = "RSA"
+  rsa_bits = 4096
+}
+
+resource "aws_key_pair" "newKey" {
+  key_name = "sshKey"
+  public_key = tls_private_key.testKey.public_key_openssh
+}
+
 resource "aws_security_group" "ec2_sg" {
     name = "ec2_sg"
     vpc_id = var.vpc_id
@@ -81,7 +92,7 @@ resource "aws_instance" "ubuntu" {
     subnet_id = var.subnet_id
     vpc_security_group_ids = [aws_security_group.ec2_sg.id]
     iam_instance_profile = aws_iam_instance_profile.ec2_access.name
-    key_name = "OtestKey.pem"
+    key_name = aws_key_pair.newKey.key_name
     tags = {
         Name = "myapp"
     }
