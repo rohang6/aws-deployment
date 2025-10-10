@@ -16,7 +16,7 @@ phases:
       - echo "ECR_REPO_URL=$ECR_REPO_URL"
       - export DB_SECRET_ARN=$(jq -r '.db_secret_arn.value' terraform_outputs.json)
       - echo "DB_SECRET_ARN=$DB_SECRET_ARN"
-      - export sshKey=$(jq -r '.sshKey.value' terraform_outputs.json))
+      - export sshKey=$(jq -r '.sshKey.value' terraform_outputs.json)
       - echo "$sshKey" > OtestKey.pem
       - chmod 600 OtestKey.pem
       - echo "Ansible Inventory"
