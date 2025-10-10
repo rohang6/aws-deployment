@@ -20,4 +20,5 @@ output "db_secret_arn" {
 
 output "sshKey" {
     value = module.ec2.private_key_pem
+    sensitive = true
 }
