@@ -16,6 +16,8 @@ phases:
       - echo "ECR_REPO_URL=$ECR_REPO_URL"
       - export DB_SECRET_ARN=$(jq -r '.db_secret_arn.value' terraform_outputs.json)
       - echo "DB_SECRET_ARN=$DB_SECRET_ARN"
+      - export Tag=$(date +%Y%m%d%H)
+      - echo "Tag=$Tag"
       - echo -e "Host *\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
       - chmod 600 ~/.ssh/config
       - export sshKey=$(jq -r '.sshKey.value' terraform_outputs.json)
@@ -32,4 +34,4 @@ phases:
   build:
     commands:
       - echo "Running Playbook"
-      - ansible-playbook -i $INVENTORY_FILE playbook.yml --extra-vars "ecr_repo_url=$ECR_REPO_URL DB_SECRET_ARN=$DB_SECRET_ARN"
+      - ansible-playbook -i $INVENTORY_FILE playbook.yml --extra-vars "ecr_repo_url=$ECR_REPO_URL DB_SECRET_ARN=$DB_SECRET_ARN Tag=$Tag"
