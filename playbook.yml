@@ -16,7 +16,7 @@
       shell: aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin {{ ecr_repo_url }}
 
     - name: Pull Image 
-      shell: docker pull {{ ecr_repo_url }}:latest
+      shell: docker pull {{ ecr_repo_url }}:{{ Tag }}
 
     - name: Run container
-      shell: docker run -d -p 8080:5000 -e DB_SECRET_ARN={{ DB_SECRET_ARN }} {{ ecr_repo_url }}:{{ Tag}}
+      shell: docker run -d -p 8080:5000 -e DB_SECRET_ARN={{ DB_SECRET_ARN }} {{ ecr_repo_url }}:{{ Tag }}
