@@ -22,7 +22,8 @@ phases:
       - echo "$sshKey" > OtestKey.pem
       - chmod 600 OtestKey.pem
       - echo "Ansible Inventory"
-      - ssh-keygen -t rsa -b 2048 -f "id_rsa" -N ""
+      - mkdir -p ~/.ssh
+      - ssh-keygen -t rsa -b 2048 -f ~/.ssh/id_rsa -N ""
       - INSTANCE_IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=myapp" --query "Reservations[*].Instances[*].PublicIpAddress" --output text)
       - echo "[myapp]" > $INVENTORY_FILE
       - echo "$INSTANCE_IP ansible_user=ubuntu" >> $INVENTORY_FILE
