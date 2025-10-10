@@ -1,6 +1,8 @@
 ---
 - hosts: myapp
   become: yes
+  vars:
+    Tag: "{{ lookup('pipe', 'date +%Y%m%d%H') }}"
   tasks:
     - name: Install docker
       apt:
@@ -19,4 +21,4 @@
       shell: docker pull {{ ecr_repo_url }}:latest
 
     - name: Run container
-      shell: docker run -d -p 8080:5000 -e DB_SECRET_ARN={{DB_SECRET_ARN}} {{ ecr_repo_url }}:latest
+      shell: docker run -d -p 8080:5000 -e DB_SECRET_ARN={{ DB_SECRET_ARN }} {{ ecr_repo_url }}:latest
