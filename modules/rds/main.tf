@@ -33,8 +33,22 @@ resource "aws_db_instance" "mydb" {
     skip_final_snapshot = true
 }
 
+resource "null_resource" "create_database" {
+    depends_on = [ aws_db_instance.mydb ]
+
+    provisioner "local-exec" {
+        command = <<EOF
+            mysql -u ${aws_db_instance.mydb.endpoint} -P 3306 -u admin -p${random_password.db_password.result} -e "CREATE DATABASE database;"
+        EOF
+
+        environment = {
+            MYSQL_PWD = random_password.db_password.result
+        }     
+    }
+}
+
 resource "aws_secretsmanager_secret" "db_secret"{
-    name = "mydb_secret_10_13"
+    name = "mydb_secret_12"
 }
 
 resource "aws_secretsmanager_secret_version" "db_secret_value" {
@@ -42,5 +56,8 @@ resource "aws_secretsmanager_secret_version" "db_secret_value" {
     secret_string = jsonencode({
         username = "admin"
         password = random_password.db_password.result
+        host = aws_db_instance.mydb.endpoint
+        database = "database"
     })
 }
+
